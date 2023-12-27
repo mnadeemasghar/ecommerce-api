@@ -3,21 +3,24 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use stdClass;
 
 class CategoryController extends Controller
 {
+    use ApiResponse;
     public function index()
     {
         $categories = Category::with('children')->whereNull('parent_id')->get();
-        return response()->json(['categories' => $categories], 200);
+        return $this->success_respoonse($categories,"All Categories");
     }
 
     public function show(Category $category)
     {
         $category->load('children');
-        return response()->json(['category' => $category], 200);
+        return $this->success_respoonse($category,"Single Category");
     }
 
     public function store(Request $request)
@@ -39,7 +42,7 @@ class CategoryController extends Controller
 
         $category = Category::create($data);
 
-        return response()->json(['category' => $category, 'message' => 'Category created successfully'], 201);
+        return $this->success_respoonse($category,"Category created successfully");
     }
 
     public function update(Request $request, Category $category)
@@ -61,7 +64,7 @@ class CategoryController extends Controller
 
         $category->update($data);
 
-        return response()->json(['category' => $category, 'message' => 'Category updated successfully'], 200);
+        return $this->success_respoonse($category,'Category updated successfully');
     }
 
     public function destroy(Category $category)
@@ -71,7 +74,6 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-
-        return response()->json(['message' => 'Category deleted successfully'], 200);
+        return $this->success_respoonse(new stdClass(), 'Category deleted successfully');
     }
 }

@@ -3,20 +3,24 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use stdClass;
 
 class ProductController extends Controller
 {
+    use ApiResponse;
+
     public function index()
     {
         $products = Product::all();
-        return response()->json(['products' => $products], 200);
+        return $this->success_respoonse($products, "All Products");
     }
 
     public function show(Product $product)
     {
-        return response()->json(['product' => $product], 200);
+        return $this->success_respoonse($product,"Single Product");
     }
 
     public function store(Request $request)
@@ -40,7 +44,7 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
-        return response()->json(['product' => $product, 'message' => 'Product created successfully'], 201);
+        return $this->success_respoonse($product,'Product created successfully');
     }
 
     public function update(Request $request, Product $product)
@@ -63,7 +67,7 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return response()->json(['product' => $product, 'message' => 'Product updated successfully'], 200);
+        return $this->success_respoonse($product,'Product updated successfully');
     }
 
     public function destroy(Product $product)
@@ -74,6 +78,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully'], 200);
+        return $this->success_respoonse(new stdClass,'Product deleted successfully');
     }
 }
