@@ -1,0 +1,19 @@
+@extends('layouts.app')
+
+@section('title', 'Add Category')
+
+@section('content')
+<div class="card">
+    <div class="card-header">Add new category</div>
+    <div class="card-body">
+        <form id="category_form" method="POST" action="{{route('categories.store')}}">
+            @csrf
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" placeholder="Enter category name">
+        </form>
+    </div>
+    <div class="card-footer">
+        <button form="category_form" class="btn btn-primary">Save</button>
+    </div>
+</div>
+@endsection
