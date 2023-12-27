@@ -28,12 +28,16 @@ class CategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $data = $request->except('image');
+
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('category_images', 'public');
-            $request->merge(['image' => $imagePath]);
+            $image = $request->file('image');
+            $imageName = time().'.'.$image->extension();
+            $image->move(public_path('category_images'), $imageName);
+            $data['image'] = 'category_images/' . $imageName;
         }
 
-        $category = Category::create($request->all());
+        $category = Category::create($data);
 
         return response()->json(['category' => $category, 'message' => 'Category created successfully'], 201);
     }
@@ -46,13 +50,16 @@ class CategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $data = $request->except('image');
+
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($category->image);
-            $imagePath = $request->file('image')->store('category_images', 'public');
-            $request->merge(['image' => $imagePath]);
+            $image = $request->file('image');
+            $imageName = time().'.'.$image->extension();
+            $image->move(public_path('category_images'), $imageName);
+            $data['image'] = 'category_images/' . $imageName;
         }
 
-        $category->update($request->all());
+        $category->update($data);
 
         return response()->json(['category' => $category, 'message' => 'Category updated successfully'], 200);
     }
