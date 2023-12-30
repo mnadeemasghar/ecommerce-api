@@ -44,6 +44,10 @@ class UserRepository implements UserRepositoryInterface{
                 'status' => false
             ]);
 
+            User::where('email',$email)->update([
+                'email_verified_at' => Carbon::now()
+            ]);
+
             return true;
         }
         else{
