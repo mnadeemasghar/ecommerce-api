@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\RegisterRequest;
+use App\Http\Requests\API\VerifyEmailRequest;
 use App\Repositories\UserRepositoryInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -27,6 +28,16 @@ class AuthController extends Controller
         }
         else{
             return $this->error_respoonse(new stdClass, "Something went wrong, please try again!");
+        }
+    }
+    
+    public function verify_email(VerifyEmailRequest $request){
+        $result = $this->userRepository->verifyEmail($request);
+        if($result){
+            return $this->success_respoonse(new stdClass,"Email Verified"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Please try again!");
         }
     }
 }
