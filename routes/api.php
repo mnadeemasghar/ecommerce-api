@@ -35,4 +35,5 @@ Route::prefix('products')->group(function () {
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/verify_email',[AuthController::class,'verify_email']);
 Route::post('/login',[AuthController::class,'login']);
+Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:api');
 Route::get('/getProfile',[AuthController::class,'getProfile'])->middleware('auth:api');

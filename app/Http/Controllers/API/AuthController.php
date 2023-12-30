@@ -52,6 +52,16 @@ class AuthController extends Controller
         }
     }
     
+    public function logout(){
+        $result = $this->userRepository->logout();
+        if($result){
+            return $this->success_respoonse(new stdClass,"Logout Successfull"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Please try again!");
+        }
+    }
+    
     public function getProfile(){
         $result = $this->userRepository->getProfile();
         if($result){

@@ -67,6 +67,17 @@ class UserRepository implements UserRepositoryInterface{
         }
     }
 
+    public function logout(){
+        $user = Auth::user();
+
+        // Revoke the user's access token
+        $user->tokens->each(function ($token, $key) {
+            $token->delete();
+        });
+
+        return true;
+    }
+
     public function getProfile(){
         return Auth::user();
     }
