@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\EmailVerificationCode;
+use App\Models\ForgotPasswordCode;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,31 @@ class UserRepository implements UserRepositoryInterface{
         }
         else{
             return false;
+        }
+    }
+    
+    public function forgotPassword($data){
+        $email = $data->email;
+
+        $user = User::where('email',$email)->first();
+
+        if($user){
+            $forgot_password_code = ForgotPasswordCode::create([
+                "code" => "123456",
+                "email" => $data->email,
+                "expire_at" => Carbon::now()->addDays(7),
+                "status" => true
+            ]);
+
+            if($forgot_password_code){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return true;
         }
     }
 

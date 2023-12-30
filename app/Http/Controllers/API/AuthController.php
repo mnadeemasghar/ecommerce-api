@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\ChangePasswordRequest;
+use App\Http\Requests\API\ForgotPasswordRequest;
 use App\Http\Requests\API\LoginRequest;
 use App\Http\Requests\API\RegisterRequest;
 use App\Http\Requests\API\UpdateProfileRequest;
@@ -28,6 +29,16 @@ class AuthController extends Controller
         $user = $this->userRepository->registerNewUser($request);
         if($user){
             return $this->success_respoonse(new stdClass,"Register successful please check your email to verify!"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Something went wrong, please try again!");
+        }
+    }
+    
+    public function forgotPassword(ForgotPasswordRequest $request){
+        $user = $this->userRepository->forgotPassword($request);
+        if($user){
+            return $this->success_respoonse(new stdClass,"OTP sent, check your email to verify!"); 
         }
         else{
             return $this->error_respoonse(new stdClass, "Something went wrong, please try again!");
