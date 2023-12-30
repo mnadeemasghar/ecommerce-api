@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->on('users')->references('id')->cascadeOnDelete();
             $table->unsignedBigInteger('cart_id');
             $table->foreign('cart_id')->on('carts')->references('id')->cascadeOnDelete();
             $table->decimal('sub_total',4);

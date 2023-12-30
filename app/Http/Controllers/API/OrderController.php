@@ -52,4 +52,15 @@ class OrderController extends Controller
             return $this->error_respoonse($result,"Somthing went wrong!");
         }
     }
+
+    public function getOrders(){
+        $result = $this->orderRepository->getOrders();
+
+        if($result){
+            return $this->success_respoonse($result,"Orders!");
+        }
+        else{
+            return $this->error_respoonse($result,"Somthing went wrong!");
+        }
+    }
 }

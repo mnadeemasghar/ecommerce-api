@@ -11,6 +11,7 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'cart_id',
         'sub_total',
         'sales_tax',
@@ -18,6 +19,6 @@ class Order extends Model
     ];
 
     public function order_detail(){
-        return $this->belongsTo(OrderDetail::class);
+        return $this->hasMany(OrderDetail::class);
     }
 }

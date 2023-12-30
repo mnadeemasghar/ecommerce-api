@@ -67,6 +67,7 @@ class OrderRepository implements OrderRepositoryInterface{
             $cart_details = CartDetail::where("cart_id" , $cart->id)->get();
 
             Order::create([
+                "user_id" => Auth::user()->id,
                 "cart_id" => $cart->id,
                 "sub_total" => 0,
                 "sales_tax" => 0,
@@ -102,5 +103,9 @@ class OrderRepository implements OrderRepositoryInterface{
         else{
             return false;
         }
+    }
+
+    public function getOrders(){
+        return Order::where("user_id",Auth::user()->id)->with('order_detail')->get();
     }
 }
