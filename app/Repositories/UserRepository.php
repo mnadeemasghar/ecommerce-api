@@ -66,4 +66,8 @@ class UserRepository implements UserRepositoryInterface{
             return false;
         }
     }
+
+    public function getProfile(){
+        return Auth::user();
+    }
 }

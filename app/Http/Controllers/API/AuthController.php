@@ -51,4 +51,14 @@ class AuthController extends Controller
             return $this->error_respoonse(new stdClass, "Please try again!");
         }
     }
+    
+    public function getProfile(){
+        $result = $this->userRepository->getProfile();
+        if($result){
+            return $this->success_respoonse($result,"User Profile"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Please try again!");
+        }
+    }
 }
