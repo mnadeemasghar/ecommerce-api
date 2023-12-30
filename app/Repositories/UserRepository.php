@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\EmailVerificationCode;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,6 +45,18 @@ class UserRepository implements UserRepositoryInterface{
             ]);
 
             return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function login($data){
+        
+        if(Auth::attempt(['email' => $data->email, 'password' => $data->password])){
+            $user = Auth::user();
+            $token = $user->createToken('MyApp')->accessToken;
+            return ["user" => $user, "token" => $token];
         }
         else{
             return false;
