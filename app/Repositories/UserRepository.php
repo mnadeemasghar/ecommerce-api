@@ -81,4 +81,18 @@ class UserRepository implements UserRepositoryInterface{
     public function getProfile(){
         return Auth::user();
     }
+
+    public function updateProfile($data){
+        $name = $data->name;
+
+        $user = Auth::user();
+        $user = User::find($user->id);
+        $user->name = $name;
+        if($user->save()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

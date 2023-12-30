@@ -7,4 +7,5 @@ interface UserRepositoryInterface{
     public function login($data);
     public function logout();
     public function getProfile();
+    public function updateProfile($data);
 }

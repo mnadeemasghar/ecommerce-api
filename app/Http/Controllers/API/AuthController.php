@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\LoginRequest;
 use App\Http\Requests\API\RegisterRequest;
+use App\Http\Requests\API\UpdateProfileRequest;
 use App\Http\Requests\API\VerifyEmailRequest;
 use App\Repositories\UserRepositoryInterface;
 use App\Traits\ApiResponse;
@@ -66,6 +67,16 @@ class AuthController extends Controller
         $result = $this->userRepository->getProfile();
         if($result){
             return $this->success_respoonse($result,"User Profile"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Please try again!");
+        }
+    }
+    
+    public function updateProfile(UpdateProfileRequest $request){
+        $result = $this->userRepository->updateProfile($request);
+        if($result){
+            return $this->success_respoonse($result,"User Profile Updated"); 
         }
         else{
             return $this->error_respoonse(new stdClass, "Please try again!");

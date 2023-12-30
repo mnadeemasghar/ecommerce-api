@@ -37,3 +37,4 @@ Route::post('/verify_email',[AuthController::class,'verify_email']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:api');
 Route::get('/getProfile',[AuthController::class,'getProfile'])->middleware('auth:api');
+Route::post('/updateProfile',[AuthController::class,'updateProfile'])->middleware('auth:api');
