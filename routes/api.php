@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
@@ -30,3 +31,5 @@ Route::prefix('products')->group(function () {
     Route::post('{product}', [ProductController::class, 'update']);
     Route::delete('{product}', [ProductController::class, 'destroy']);
 });
+
+Route::post('/register',[AuthController::class,'register']);
