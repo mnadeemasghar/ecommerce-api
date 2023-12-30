@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,3 +42,5 @@ Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:api');
 Route::get('/getProfile',[AuthController::class,'getProfile'])->middleware('auth:api');
 Route::post('/updateProfile',[AuthController::class,'updateProfile'])->middleware('auth:api');
 Route::post('/changePassword',[AuthController::class,'changePassword'])->middleware('auth:api');
+
+Route::post('/addToCart',[OrderController::class,'addToCart'])->middleware('auth:api');
