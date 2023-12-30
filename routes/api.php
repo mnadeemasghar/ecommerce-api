@@ -44,3 +44,4 @@ Route::post('/updateProfile',[AuthController::class,'updateProfile'])->middlewar
 Route::post('/changePassword',[AuthController::class,'changePassword'])->middleware('auth:api');
 
 Route::post('/addToCart',[OrderController::class,'addToCart'])->middleware('auth:api');
+Route::post('/removeFromCart',[OrderController::class,'removeFromCart'])->middleware('auth:api');

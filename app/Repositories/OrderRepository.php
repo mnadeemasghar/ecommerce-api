@@ -35,4 +35,26 @@ class OrderRepository implements OrderRepositoryInterface{
 
         return CartDetail::where("cart_id" , $cart->id)->get();
     }
+
+    public function removeFromCart($data){
+        $cart_data = Cart::where('user_id', Auth::user()->id)->first();
+        if($cart_data != null){
+            $cart = $cart_data;
+        }
+        else{
+            Cart::create(['user_id' => Auth::user()->id]);
+            $cart = Cart::where('user_id', Auth::user()->id)->first();
+        }
+
+        $cart_details_data = CartDetail::where("cart_id" , $cart->id)->where("product_id" , $data->product_id)->first();
+        
+        if($cart_details_data != null){
+            $cart_details_data->delete();
+        }
+        else{
+            return false;
+        }
+
+        return CartDetail::where("cart_id" , $cart->id)->get();
+    }
 }
