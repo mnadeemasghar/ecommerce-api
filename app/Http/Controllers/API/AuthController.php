@@ -9,6 +9,7 @@ use App\Http\Requests\API\LoginRequest;
 use App\Http\Requests\API\RegisterRequest;
 use App\Http\Requests\API\UpdateProfileRequest;
 use App\Http\Requests\API\VerifyEmailRequest;
+use App\Http\Requests\API\VerifyPasswordCodeRequest;
 use App\Repositories\UserRepositoryInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -49,6 +50,16 @@ class AuthController extends Controller
         $result = $this->userRepository->verifyEmail($request);
         if($result){
             return $this->success_respoonse(new stdClass,"Email Verified"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Please try again!");
+        }
+    }
+    
+    public function verifyPasswordCode(VerifyPasswordCodeRequest $request){
+        $result = $this->userRepository->verifyPasswordCode($request);
+        if($result){
+            return $this->success_respoonse(new stdClass,"Password changed!"); 
         }
         else{
             return $this->error_respoonse(new stdClass, "Please try again!");

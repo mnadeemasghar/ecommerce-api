@@ -81,6 +81,29 @@ class UserRepository implements UserRepositoryInterface{
         }
     }
 
+    public function verifyPasswordCode($data){
+        $email = $data->email;
+        $code = $data->code;
+        $today = Carbon::now();
+
+        $forgot_password = ForgotPasswordCode::where('email',$email)->where('code',$code)->where('status',true)->where('expire_at','>=',$today)->first();
+
+        if($forgot_password != null){
+            $forgot_password->update([
+                'status' => false
+            ]);
+
+            User::where('email',$email)->update([
+                'password' => Hash::make($data->new_password)
+            ]);
+
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function login($data){
         
         if(Auth::attempt(['email' => $data->email, 'password' => $data->password])){
