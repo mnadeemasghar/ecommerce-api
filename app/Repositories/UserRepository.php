@@ -95,4 +95,21 @@ class UserRepository implements UserRepositoryInterface{
             return false;
         }
     }
+
+    public function changePassword($data){
+        $old_password = $data->old_password;
+        $new_password = $data->new_password;
+
+        $user = Auth::user();
+        $user = User::find($user->id);
+
+        if(Hash::check($old_password,$user->password)){
+            $user->password = Hash::make($new_password);
+            $user->save();
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\ChangePasswordRequest;
 use App\Http\Requests\API\LoginRequest;
 use App\Http\Requests\API\RegisterRequest;
 use App\Http\Requests\API\UpdateProfileRequest;
@@ -77,6 +78,16 @@ class AuthController extends Controller
         $result = $this->userRepository->updateProfile($request);
         if($result){
             return $this->success_respoonse($result,"User Profile Updated"); 
+        }
+        else{
+            return $this->error_respoonse(new stdClass, "Please try again!");
+        }
+    }
+    
+    public function changePassword(ChangePasswordRequest $request){
+        $result = $this->userRepository->changePassword($request);
+        if($result){
+            return $this->success_respoonse($result,"Password Updated"); 
         }
         else{
             return $this->error_respoonse(new stdClass, "Please try again!");

@@ -38,3 +38,4 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:api');
 Route::get('/getProfile',[AuthController::class,'getProfile'])->middleware('auth:api');
 Route::post('/updateProfile',[AuthController::class,'updateProfile'])->middleware('auth:api');
+Route::post('/changePassword',[AuthController::class,'changePassword'])->middleware('auth:api');

@@ -8,4 +8,5 @@ interface UserRepositoryInterface{
     public function logout();
     public function getProfile();
     public function updateProfile($data);
+    public function changePassword($data);
 }
