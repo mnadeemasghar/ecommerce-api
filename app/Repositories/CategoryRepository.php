@@ -9,7 +9,7 @@ class CategoryRepository implements CategoryRepositoryInterface{
         return Category::with('children')->whereNull('parent_id')->get();
     }
     public function getCategoryById($id){
-        return Category::with('children')->where('id',$id)->whereNull('parent_id')->first();
+        return Category::with('children')->with('products')->where('id',$id)->whereNull('parent_id')->first();
     }
     public function deleteCategoryById($id){
         $category = Category::find($id);
