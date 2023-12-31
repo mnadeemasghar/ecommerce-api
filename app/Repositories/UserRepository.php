@@ -15,6 +15,7 @@ class UserRepository implements UserRepositoryInterface{
         $user = User::create([
             "name" => $data->name,
             "email" => $data->email,
+            "phone_number" => $data->phone_number,
             "password" => Hash::make($data->password),
         ]);
 
@@ -133,10 +134,12 @@ class UserRepository implements UserRepositoryInterface{
 
     public function updateProfile($data){
         $name = $data->name;
+        $phone_number = $data->phone_number;
 
         $user = Auth::user();
         $user = User::find($user->id);
         $user->name = $name;
+        $user->phone_number = $phone_number;
         if($user->save()){
             return true;
         }
