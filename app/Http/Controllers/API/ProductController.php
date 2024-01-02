@@ -20,6 +20,31 @@ class ProductController extends Controller
         return $this->success_respoonse($products, "All Products");
     }
 
+    public function search(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('description')) {
+            $query->Where('description', 'like', '%' . $request->description . '%');
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        $products = $query->get();
+
+        return $this->success_respoonse($products, "Searched Products");
+    }
+
     public function show(Product $product)
     {
         $productWithImages = $product->load('product_images')->load('product_3d_images');
