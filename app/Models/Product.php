@@ -12,7 +12,13 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'image',
         'category_id'
     ];
+
+    public function product_images(){
+        return $this->hasMany(ProductImage::class);
+    }
+    public function product_3d_images(){
+        return $this->hasMany(Product3dImage::class,"product_id");
+    }
 }

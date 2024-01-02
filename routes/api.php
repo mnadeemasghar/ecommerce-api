@@ -29,6 +29,9 @@ Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('{product}', [ProductController::class, 'show']);
     Route::post('/', [ProductController::class, 'store']);
+    Route::post('/addImage', [ProductController::class, 'addImage']);
+    Route::post('/removeImage/{product_image}', [ProductController::class, 'removeImage']);
+    Route::post('/remove3dImage/{product_image}', [ProductController::class, 'remove3dImage']);
     Route::post('{product}', [ProductController::class, 'update']);
     Route::delete('{product}', [ProductController::class, 'destroy']);
 });

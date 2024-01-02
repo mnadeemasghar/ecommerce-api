@@ -3,6 +3,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Product3dImage;
+use App\Models\ProductImage;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +22,8 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        return $this->success_respoonse($product,"Single Product");
+        $productWithImages = $product->load('product_images')->load('product_3d_images');
+        return $this->success_respoonse($productWithImages,"Single Product");
     }
 
     public function store(Request $request)
@@ -29,22 +32,58 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $product = Product::create($request->all());
+
+        return $this->success_respoonse($product,'Product created successfully');
+    }
+
+    public function addImage(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'image' => 'required|file',
+            'type' => 'required|in:2d,3d'
         ]);
 
         $data = $request->except('image');
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time().'.'.$image->extension();
-            $image->move(public_path('product_images'), $imageName);
-            $data['image'] = 'product_images/' . $imageName;
+        
+        if($request->type == '2d'){
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time().'.'.$image->extension();
+                $image->move(public_path('product_images'), $imageName);
+                $data['image_path'] = 'product_images/' . $imageName;
+            }
+            $product_image = ProductImage::create($data);
+        }
+        else if($request->type == '3d'){
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time().'.glb';
+                $image->move(public_path('product_images'), $imageName);
+                $data['image_path'] = 'product_images/' . $imageName;
+            }
+            $product_image = Product3dImage::create($data);
         }
 
-        $product = Product::create($data);
 
-        return $this->success_respoonse($product,'Product created successfully');
+        return $this->success_respoonse($product_image,'Image added successfully');
+    }
+
+    public function removeImage(ProductImage $product_image)
+    {
+        $product_image->delete();
+        return $this->success_respoonse(new stdClass,'Image removed successfully');
+    }
+
+    public function remove3dImage(Product3dImage $product_image)
+    {
+        $product_image->delete();
+        return $this->success_respoonse(new stdClass,'Image removed successfully');
     }
 
     public function update(Request $request, Product $product)
@@ -72,10 +111,6 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
-        }
-
         $product->delete();
 
         return $this->success_respoonse(new stdClass,'Product deleted successfully');
