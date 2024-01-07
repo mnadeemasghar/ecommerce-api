@@ -16,7 +16,14 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::with('product_images')->with('product_3d_images')->get();
+        $products = Product::with([
+            'product_images',
+            'product_3d_images',
+            'product_colors',
+            'product_metas',
+            'product_measurements',
+            'product_reviews',
+        ])->get();
         return $this->success_respoonse($products, "All Products");
     }
 
@@ -40,7 +47,14 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        $products = $query->get();
+        $products = $query->with([
+            'product_images',
+            'product_3d_images',
+            'product_colors',
+            'product_metas',
+            'product_measurements',
+            'product_reviews',
+        ])->get();
 
         return $this->success_respoonse($products, "Searched Products");
     }
