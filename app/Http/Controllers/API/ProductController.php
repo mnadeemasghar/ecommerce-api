@@ -2,9 +2,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\StoreProductRequest;
+use App\Http\Requests\API\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\Product3dImage;
 use App\Models\ProductImage;
+use App\Repositories\ProductRepositoryInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,16 +17,16 @@ class ProductController extends Controller
 {
     use ApiResponse;
 
+    private $productRepository;
+
+    public function __construct(ProductRepositoryInterface $productRepositoryInterface)
+    {
+        $this->productRepository = $productRepositoryInterface;
+    }
+
     public function index()
     {
-        $products = Product::with([
-            'product_images',
-            'product_3d_images',
-            'product_colors',
-            'product_metas',
-            'product_measurements',
-            'product_reviews',
-        ])->get();
+        $products = $this->productRepository->getProducts();
         return $this->success_respoonse($products, "All Products");
     }
 
@@ -61,21 +64,13 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        $productWithImages = $product->load('product_images')->load('product_3d_images');
-        return $this->success_respoonse($productWithImages,"Single Product");
+        $product = $this->productRepository->getProductById($product->id);
+        return $this->success_respoonse($product,"Single Product");
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-
-        $product = Product::create($request->all());
-
+        $product = $this->productRepository->storeProduct($request);
         return $this->success_respoonse($product,'Product created successfully');
     }
 
@@ -125,33 +120,15 @@ class ProductController extends Controller
         return $this->success_respoonse(new stdClass,'Image removed successfully');
     }
 
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $data = $request->except('image');
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time().'.'.$image->extension();
-            $image->move(public_path('product_images'), $imageName);
-            $data['image'] = 'product_images/' . $imageName;
-        }
-
-        $product->update($data);
-
+        $product = $this->productRepository->updateProduct($request,$product->id);
         return $this->success_respoonse($product,'Product updated successfully');
     }
 
     public function destroy(Product $product)
     {
-        $product->delete();
-
+        $this->productRepository->deleteProductById($product->id);
         return $this->success_respoonse(new stdClass,'Product deleted successfully');
     }
 }
