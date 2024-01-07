@@ -9,27 +9,6 @@
     <script src="{{asset('/js/bootstrap.js')}}"></script>
 </head>
 <body>
-    <header>
-        <!-- Add navigation or other header content here -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('home')}}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('categories')}}">Category</a>
-                </li>
-                <li class="nav-item">
-                    <form id="logout" method="POST" action="{{route('logout')}}">
-                        @csrf
-                    </form>
-                        <button form="logout" class="nav-link btn btn-danger">Logout</button>
-                </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
     <main>
         @if(session('success'))
