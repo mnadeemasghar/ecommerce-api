@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToCartRequest;
+use App\Http\Requests\API\PlaceOrderRequest;
 use App\Http\Requests\API\RemoveFromCartRequest;
 use App\Repositories\OrderRepositoryInterface;
 use App\Traits\ApiResponse;
@@ -42,8 +43,8 @@ class OrderController extends Controller
         }
     }
 
-    public function placeOrder(){
-        $result = $this->orderRepository->placeOrder();
+    public function placeOrder(PlaceOrderRequest $request){
+        $result = $this->orderRepository->placeOrder($request);
 
         if($result){
             return $this->success_respoonse($result,"Order placed!");

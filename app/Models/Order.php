@@ -15,7 +15,11 @@ class Order extends Model
         'cart_id',
         'sub_total',
         'sales_tax',
-        'total'
+        'total',
+        'drop_lat',
+        'drop_lng',
+        'drop_address',
+        'note',
     ];
 
     public function order_detail(){

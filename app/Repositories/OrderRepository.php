@@ -61,7 +61,7 @@ class OrderRepository implements OrderRepositoryInterface{
         return CartDetail::where("cart_id" , $cart->id)->get();
     }
 
-    public function placeOrder(){
+    public function placeOrder($request){
         $cart = Cart::where('user_id', Auth::user()->id)->first();
         if($cart != null){
             $cart_details = CartDetail::where("cart_id" , $cart->id)->get();
@@ -71,7 +71,11 @@ class OrderRepository implements OrderRepositoryInterface{
                 "cart_id" => $cart->id,
                 "sub_total" => 0,
                 "sales_tax" => 0,
-                "total" => 0
+                "total" => 0,
+                "drop_lat" => $request->drop_lat,
+                "drop_lng" => $request->drop_lng,
+                "drop_address" => $request->drop_address,
+                "note" => $request->note
             ]);
             $order = Order::where("cart_id" , $cart->id)->first();
 
