@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryRepository implements CategoryRepositoryInterface{
     public function getCategories(){
-        return Category::with('children')->whereNull('parent_id')->get();
+        // return Category::with('children')->whereNull('parent_id')->get();
+        return Category::whereNull('parent_id')->get();
     }
     public function getCategoryById($id){
-        return Category::with('children')->with('products')->where('id',$id)->whereNull('parent_id')->first();
+        // return Category::with('children')->with('products')->where('id',$id)->whereNull('parent_id')->first();
+        return Category::with('products')->where('id',$id)->whereNull('parent_id')->first();
     }
     public function deleteCategoryById($id){
         $category = Category::find($id);
